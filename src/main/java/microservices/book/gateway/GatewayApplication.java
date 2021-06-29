@@ -4,8 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
+@EnableEurekaClient
 @SpringBootApplication
 public class GatewayApplication {
 
@@ -18,15 +20,15 @@ public class GatewayApplication {
 //		return builder.routes()
 //				.route("multiplications",
 //						r -> r.path("/api/multiplications/**").filters(f -> f.stripPrefix(1))
-//								.uri("http://localhost:8080/multiplications/"))
+//								.uri("lb://multiplication/multiplications/"))
 //				.route("results",
 //						r -> r.path("/api/results/**").filters(f -> f.stripPrefix(1))
-//								.uri("http://localhost:8080/results/"))
+//								.uri("lb://multiplication/results/"))
 //				.route("leaders",
 //						r -> r.path("/api/leaders/**").filters(f -> f.stripPrefix(1))
-//								.uri("http://localhost:8081/leaders/"))
+//								.uri("lb://gamification//leaders/"))
 //				.route("stats",
-//						r -> r.path("/api/stats/**").filters(f -> f.stripPrefix(1)).uri("http://localhost:8081/stats/"))
+//						r -> r.path("/api/stats/**").filters(f -> f.stripPrefix(1)).uri("http://gamification/stats/"))
 //				.build();
 //	}
 
