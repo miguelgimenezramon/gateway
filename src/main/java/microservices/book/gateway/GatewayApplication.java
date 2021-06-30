@@ -4,11 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClients;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
+import microservices.book.gateway.configuration.SpringCloudLoadBalancerConfiguration;
+
 @EnableEurekaClient
 @SpringBootApplication
+@LoadBalancerClients(defaultConfiguration = SpringCloudLoadBalancerConfiguration.class)
 public class GatewayApplication {
 
 	public static void main(String[] args) {
@@ -28,7 +32,8 @@ public class GatewayApplication {
 //						r -> r.path("/api/leaders/**").filters(f -> f.stripPrefix(1))
 //								.uri("lb://gamification//leaders/"))
 //				.route("stats",
-//						r -> r.path("/api/stats/**").filters(f -> f.stripPrefix(1)).uri("http://gamification/stats/"))
+//						r -> r.path("/api/stats/**").filters(f -> f.stripPrefix(1)).
+//								uri("lb://gamification/stats/"))
 //				.build();
 //	}
 

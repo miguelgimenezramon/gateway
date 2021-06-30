@@ -20,6 +20,10 @@ spring:
         - Path=/api/multiplications/**
         filters:
         - StripPrefix=1
+        - name: CircuitBreaker
+          args:
+            name: multiplicationsCircuitBreaker
+            fallbackUri: forward:/multiplications-fallback
       - id: results
         uri: lb://multiplication/results
         predicates:
