@@ -30,6 +30,12 @@ spring:
         - Path=/api/results/**
         filters:
         - StripPrefix=1
+      - id: users
+        uri: lb://multiplication/users
+        predicates:
+        - Path=/api/users/**
+        filters:
+        - StripPrefix=1
       - id: leaders
         uri: lb://gamification/leaders
         predicates:
@@ -42,6 +48,13 @@ spring:
         - Path=/api/stats/**
         filters:
         - StripPrefix=1
+      - id: scores
+        uri: lb://gamification/scores
+        predicates:
+        - Path=/api/scores/**
+        filters:
+        - StripPrefix=1
+
 
 management:
   endpoints:
@@ -49,6 +62,88 @@ management:
       exposure:
         include: httptrace, gateway
 eureka:
+  enabled: true
   client:
     service-url:
-      default-zone: http//localhost:8761/eureka
+      default-zone: http://localhost:8761/eureka
+
+---
+spring:
+  profiles: test
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      enabled: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes:
+      - id: multiplications
+        uri: lb://multiplication/multiplications
+        predicates:
+        - Path=/api/multiplications/**
+        filters:
+        - StripPrefix=1
+        - name: CircuitBreaker
+          args:
+            name: multiplicationsCircuitBreaker
+            fallbackUri: forward:/multiplications-fallback
+      - id: results
+        uri: lb://multiplication/results
+        predicates:
+        - Path=/api/results/**
+        filters:
+        - StripPrefix=1
+      - id: users
+        uri: lb://multiplication/users
+        predicates:
+        - Path=/api/users/**
+        filters:
+        - StripPrefix=1
+      - id: leaders
+        uri: lb://gamification/leaders
+        predicates:
+        - Path=/api/leaders/**
+        filters:
+        - StripPrefix=1
+      - id: stats
+        uri: lb://gamification/stats
+        predicates:
+        - Path=/api/stats/**
+        filters:
+        - StripPrefix=1
+      - id: scores
+        uri: lb://gamification/scores
+        predicates:
+        - Path=/api/scores/**
+        filters:
+        - StripPrefix=1
+      - id: admin-social-multiplication
+        uri: lb://multiplication/admin
+        predicates:
+        - Path=/api/multiplication/admin/**
+        filters:
+        - StripPrefix=1
+      - id: admin-gamification
+        uri: lb://gamification/admin
+        predicates:
+        - Path=/api/gamification/admin/**
+        filters:
+        - StripPrefix=1
+
+ 
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: httptrace, gateway
+eureka:
+  enabled: true
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
